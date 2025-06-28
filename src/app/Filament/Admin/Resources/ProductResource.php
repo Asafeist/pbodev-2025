@@ -2,9 +2,11 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\PersonResource\Pages;
-use App\Filament\Admin\Resources\PersonResource\RelationManagers;
-use App\Models\Person;
+use App\Filament\Admin\Resources\ProductResource\Pages;
+use App\Filament\Admin\Resources\ProductResource\Pages\EditProduct;
+use App\Filament\Admin\Resources\ProductResource\RelationManagers;
+use App\Models\Client;
+use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,10 +14,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Spatie\Permission\Models\Role;
 
-class PersonResource extends Resource
+class ProductResource extends Resource
 {
-    protected static ?string $model = Person::class;
+    protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,13 +26,24 @@ class PersonResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('client_id')
+                    ->label('Client Name')
+                    ->options(
+                        Client::with('user')
+                            ->get()
+                            ->mapWithKeys(fn($client) => [
+                                $client->id => $client->user?->name ?? 'No User'
+                            ])
+                    )
+                    ->disabled(fn($livewire) => $livewire instanceof EditProduct)
+                    ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('date_of_birth')
-                    ->required(),
-                Forms\Components\TextInput::make('gender')
-                    ->required(),
+                Forms\Components\TextInput::make('price')
+                    ->required()
+                    ->numeric()
+                    ->prefix('Rp.'),
             ]);
     }
 
@@ -37,12 +51,14 @@ class PersonResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('client.user.name')
+                    ->label('Client')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('date_of_birth')
-                    ->date()
+                Tables\Columns\TextColumn::make('price')
+                    ->money('Rp.', true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('gender'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -75,9 +91,9 @@ class PersonResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPeople::route('/'),
-            'create' => Pages\CreatePerson::route('/create'),
-            'edit' => Pages\EditPerson::route('/{record}/edit'),
+            'index' => Pages\ListProducts::route('/'),
+            'create' => Pages\CreateProduct::route('/create'),
+            'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }
 }

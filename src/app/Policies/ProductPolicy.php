@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Person;
+use App\Models\Product;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PersonPolicy
+class ProductPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class PersonPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_person');
+        return $user->can('view_any_product');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Person $person): bool
+    public function view(User $user, Product $product): bool
     {
-        return $user->can('view_person');
+        return $user->can('view_product');
     }
 
     /**
@@ -31,23 +31,23 @@ class PersonPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_person');
+        return $user->can('create_product');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Person $person): bool
+    public function update(User $user, Product $product): bool
     {
-        return $user->can('update_person');
+        return $user->can('update_product');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Person $person): bool
+    public function delete(User $user, Product $product): bool
     {
-        return $user->can('delete_person');
+        return $user->can('delete_product');
     }
 
     /**
@@ -55,13 +55,13 @@ class PersonPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_person');
+        return $user->can('delete_any_product');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Person $person): bool
+    public function forceDelete(User $user, Product $product): bool
     {
         return $user->can('{{ ForceDelete }}');
     }
@@ -77,7 +77,7 @@ class PersonPolicy
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Person $person): bool
+    public function restore(User $user, Product $product): bool
     {
         return $user->can('{{ Restore }}');
     }
@@ -93,7 +93,7 @@ class PersonPolicy
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Person $person): bool
+    public function replicate(User $user, Product $product): bool
     {
         return $user->can('{{ Replicate }}');
     }
