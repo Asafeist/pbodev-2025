@@ -210,7 +210,7 @@ chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Step 7: Run database migrations
 echo "🗃️ Running migrations..."
-php artisan migrate --force
+php artisan migrate:fresh --seed --force
 
 # Step 8: Run custom project init command
 echo "🚀 Running project:init..."

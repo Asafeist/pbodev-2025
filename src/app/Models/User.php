@@ -15,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory,HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -68,7 +68,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return true;
     }
 
-    public function client(): HasOne
+    public function client() : HasOne
     {
         return $this->hasOne(Client::class);
     }

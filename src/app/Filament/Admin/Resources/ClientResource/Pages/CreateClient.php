@@ -8,14 +8,13 @@ use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
 class CreateClient extends CreateRecord
 {
     protected static string $resource = ClientResource::class;
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $slugName = Str::slug($data['name']);
-        $timestamp = now()->timestamp;
+        $timesstamp = now()->timestamp;
         $email = "{$slugName}@admin.com";
         $password = Hash::make('password');
 
